@@ -1,0 +1,28 @@
+{
+    "name": "SimpleLunarCoins",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "MMHOOK_RoR2.dll",
+        "BepInEx.dll",
+        "MonoMod.Utils.dll",
+        "RoR2.dll",
+        "R2API.dll",
+        "Mono.Cecil.dll",
+        "R2API.Language.dll",
+        "MonoMod.RuntimeDetour.dll",
+        "Facepunch.Steamworks.dll",
+        "MMHOOK_KinematicCharacterController.dll",
+        "com.unity.multiplayer-hlapi.Runtime.dll",
+        "R2API.Addressables.dll",
+        "R2API.Core.dll",
+        "Wwise.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -3,19 +3,6 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
-AssetBundles
-Library
-Logs
-Packages
-ProjectSettings
-Temp
-Thunderkit
-Assets/ThunderKitSettings
-StreamingAssets
-com.unity.multiplayer-hlapi.Runtime.dll
-.meta
-.collabignore
-
 # User-specific files
 *.suo
 *.user

@@ -1,0 +1,79 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e563561e08b6a3642a487177f5cfbb37, type: 3}
+  m_Name: SimpleLunarCoins
+  m_EditorClassIdentifier: 
+  Data:
+  - {fileID: 114211852988908172}
+  - {fileID: 114107831304456238}
+  - {fileID: 114431642618062350}
+  identity: {fileID: 114211852988908172}
+  QuickAccess: 1
+--- !u!114 &114107831304456238
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b7e13dda513544419a89926bd12ad8a, type: 3}
+  m_Name: AssemblyDefinitions
+  m_EditorClassIdentifier: 
+  StagingPaths:
+  - <ManifestPluginStaging>
+  definitions:
+  - {fileID: 5897886265953266890, guid: 51c4ec3f68035ef4d97a9a20813d89ff, type: 3}
+--- !u!114 &114211852988908172
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f22bb7fd1d3b56a48bc52f8e407901d6, type: 3}
+  m_Name: ManifestIdentity
+  m_EditorClassIdentifier: 
+  StagingPaths:
+  - <ManifestPluginStaging>
+  Author: mw
+  Name: SimpleLunarCoins
+  Description: no!!
+  Version: 0.0.1
+  Dependencies:
+  - {fileID: 11400000, guid: 2d4d09ec817c24698d35dc9bf0704fdc, type: 2}
+--- !u!114 &114431642618062350
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17d1008b78cb6e846889b7778282fbef, type: 3}
+  m_Name: AssetBundleDefinitions
+  m_EditorClassIdentifier: 
+  StagingPaths:
+  - <ManifestPluginStaging>
+  assetBundles:
+  - assetBundleName: mwassetbundle
+    assets:
+    - {fileID: 2800000, guid: 28e15d6ce92a0584da9b24f29277a7ab, type: 3}
+    - {fileID: 2800000, guid: 4a2ed76c172f5c54491753917642c33c, type: 3}
+    - {fileID: 2100000, guid: 405cdd564b6bc6042957442e942b45ca, type: 2}
+    - {fileID: 4300000, guid: 02ea7b82ee3afb84b988667f0801370c, type: 2}
+    - {fileID: 1628511773001811, guid: 0c0c1307725983e4aae917ecc8af646d, type: 3}
+    - {fileID: 11400000, guid: f5bb405217db5b64db3c11959e2d9d45, type: 2}
