@@ -57,11 +57,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\CoinsMod\CoinSfx.cs" />
+    <Compile Include="Assets\CoinsMod\Assets\CoinSfx.cs" />
+    <Compile Include="Assets\CoinsMod\Content.cs" />
+    <Compile Include="Assets\CoinsMod\Hooks.cs" />
     <Compile Include="Assets\CoinsMod\Log.cs" />
     <Compile Include="Assets\CoinsMod\SimpleLunarCoins.cs" />
     <None Include="Assets\CoinsMod\Assets\RoR2StubbedShaders-1.0.0\RoR2\Deferred\HGSnowTopped.shader" />
-    <None Include="Assets\CoinsMod\Coin.asmdef" />
+    <None Include="Assets\CoinsMod\CoinAssembly.asmdef" />
     <None Include="Assets\CoinsMod\Assets\RoR2StubbedShaders-1.0.0\RoR2\CustomPostProcess\RampFog.shader" />
     <None Include="Assets\CoinsMod\Assets\RoR2StubbedShaders-1.0.0\RoR2\FX\HGDamageNumber.shader" />
     <None Include="Assets\CoinsMod\Assets\RoR2StubbedShaders-1.0.0\RoR2\FX\HGIntersectionCloudRemap.shader" />
