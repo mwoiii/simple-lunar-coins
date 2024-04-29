@@ -11,6 +11,7 @@ ProjectSettings
 Temp
 Thunderkit
 Assets/ThunderKitSettings
+Assets/Scenes
 StreamingAssets
 com.unity.multiplayer-hlapi.Runtime.dll
 .meta
