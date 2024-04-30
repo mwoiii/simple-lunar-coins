@@ -22,10 +22,10 @@ The roadmap to completion is as follows, subject to change if additional ideas a
 
 ✓ Coin drop sound effect
 
--Enable/disable coin sharing (all players receive dropped coins)
+✓ Enable/disable coin sharing (all players receive dropped coins)
 
--Enable/disable manual coin pickup
+✓ Enable/disable manual coin pickup
 
--Enable/disable per-run system
+✓ Enable/disable per-run system
 
 -Lunar coin storage (as to not overwrite lunar coin count before the mod was installed)

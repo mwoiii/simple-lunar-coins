@@ -11,6 +11,7 @@ using BepInEx.Configuration;
 using RoR2.ContentManagement;
 using System.Collections;
 using Path = System.IO.Path;
+using static Facepunch.Steamworks.LobbyList.Filter;
 
 namespace SimpleLunarCoins
 {
@@ -18,13 +19,19 @@ namespace SimpleLunarCoins
 	{
         public static void Init()
         {
+            // Changing coin drop chance
             On.RoR2.PlayerCharacterMasterController.Awake += InitialCoinChance;
 
+            // Changing chance multiplier & preventing coin droplet, instead spawning coin effect 
             BindingFlags allFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance | BindingFlags.DeclaredOnly;
             var initDelegate = typeof(PlayerCharacterMasterController).GetNestedTypes(allFlags)[0].GetMethodCached(name: "<Init>b__72_0");
             MonoMod.RuntimeDetour.HookGen.HookEndpointManager.Modify(initDelegate, (Action<ILContext>)CoinDropHook);
 
+            // Setting coins at start of run
             On.RoR2.Run.OnUserAdded += StartingCoins;
+
+            // Lunar coin distribution for droplet (distribution for effect type is built into CoinDropHook)
+            On.RoR2.LunarCoinDef.GrantPickup += RegularCoinDistribute;
         }
 
         private static void InitialCoinChance(On.RoR2.PlayerCharacterMasterController.orig_Awake orig, PlayerCharacterMasterController self)
@@ -58,48 +65,78 @@ namespace SimpleLunarCoins
 
             if (b)
             {
-
                 var label = c.DefineLabel();
-
-                c.Index += 11;
-                c.MarkLabel(label);
-                c.Index -= 11;
-                c.Emit(OpCodes.Br, label);
                 c.Index += 14;
                 c.Next.Operand = SimpleLunarCoins.coinMultiplier.Value;
-                c.Index += 2;
-                c.Emit(OpCodes.Ldarg_1);
-
-                c.EmitDelegate<Action<DamageReport>>((damageReport) =>
+                if (SimpleLunarCoins.noCoinDroplet.Value)
                 {
-                    foreach (PlayerCharacterMasterController instance in PlayerCharacterMasterController.instances)
+                    c.Index -= 3;
+                    c.MarkLabel(label);
+                    c.Index -= 11;
+                    c.Emit(OpCodes.Br, label);
+                    c.Index += 16;
+                    c.Emit(OpCodes.Ldarg_1);
+                    c.EmitDelegate<Action<DamageReport>>((damageReport) =>
                     {
-#pragma warning disable Publicizer001
-                        if ((bool)instance.GetFieldValue<NetworkUser>("resolvedNetworkUserInstance")) { instance.GetFieldValue<NetworkUser>("resolvedNetworkUserInstance").AwardLunarCoins(1); }
-#pragma warning restore Publicizer001
-                    }
+                        if (SimpleLunarCoins.teamCoins.Value)
+                        {
+                            foreach (PlayerCharacterMasterController instance in PlayerCharacterMasterController.instances)
+                            {
+                                if ((bool)instance.GetFieldValue<NetworkUser>("resolvedNetworkUserInstance"))
+                                {
+                                    instance.GetFieldValue<NetworkUser>("resolvedNetworkUserInstance").AwardLunarCoins(1);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if ((bool)damageReport.attackerMaster.playerCharacterMasterController)
+                            {
+                                damageReport.attackerMaster.playerCharacterMasterController.GetFieldValue<NetworkUser>("resolvedNetworkUserInstance").AwardLunarCoins(1);
+                            }
+                        }
 
-                    AssetBundleRequest loadAsset = Assets.mainAssetBundle.LoadAssetAsync<GameObject>("LunarCoinEmitter");
-                    GameObject myLoadedPrefab = loadAsset.asset as GameObject;
+                        AssetBundleRequest loadAsset = Assets.mainAssetBundle.LoadAssetAsync<GameObject>("LunarCoinEmitter");
+                        GameObject myLoadedPrefab = loadAsset.asset as GameObject;
 
-                    var coinEffectPrefab = myLoadedPrefab;
-                    EffectManager.SpawnEffect(coinEffectPrefab, new EffectData
-                    {
-                        origin = damageReport.victimBody.corePosition,
-                        genericFloat = 20f,
-                        scale = damageReport.victimBody.radius
-                    }, transmit: true);
-
-                });
+                        var coinEffectPrefab = myLoadedPrefab;
+                        EffectManager.SpawnEffect(coinEffectPrefab, new EffectData
+                        {
+                            origin = damageReport.victimBody.corePosition,
+                            genericFloat = 20f,
+                            scale = damageReport.victimBody.radius
+                        }, transmit: true);
+                    });
+                }
             }
             else { Log.Info("ILHook failed"); }
         }
 
         private static void StartingCoins(On.RoR2.Run.orig_OnUserAdded orig, Run self, NetworkUser user)
         {
-            user.InvokeMethod("RpcDeductLunarCoins", user.lunarCoins);
-            user.InvokeMethod("RpcAwardLunarCoins", SimpleLunarCoins.startingCoins.Value);
+
+            if (SimpleLunarCoins.resetCoins.Value)
+            {
+                user.InvokeMethod("RpcDeductLunarCoins", user.lunarCoins);
+                user.InvokeMethod("RpcAwardLunarCoins", SimpleLunarCoins.startingCoins.Value);
+            }
             orig(self, user);
+        }
+
+        private static void RegularCoinDistribute(On.RoR2.LunarCoinDef.orig_GrantPickup orig, LunarCoinDef self, ref PickupDef.GrantContext context)
+        {
+            if (SimpleLunarCoins.teamCoins.Value)
+            {
+                NetworkUser networkUser = Util.LookUpBodyNetworkUser(context.body);
+                foreach (PlayerCharacterMasterController instance in PlayerCharacterMasterController.instances)
+                {
+                    if ((bool)instance.GetFieldValue<NetworkUser>("resolvedNetworkUserInstance") && instance.GetFieldValue<NetworkUser>("resolvedNetworkUserInstance") != networkUser)
+                    {
+                        instance.GetFieldValue<NetworkUser>("resolvedNetworkUserInstance").AwardLunarCoins(1);
+                    }
+                }
+            }
+            orig(self, ref context);
         }
     }
 }

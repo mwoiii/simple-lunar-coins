@@ -1,3 +1,15 @@
+## 1.1.0
+
+-Updated description and README
+
+-Reduced default coin drop chance to 4%
+
+-Implemented enabling/disabling distributed coins
+
+-Implemented enabling/disabling coin droplets
+
+-Implemented enabling/disabling coin count reset at the start of a run
+
 ## 1.0.1
 
 -Grammatical and formatting fixes

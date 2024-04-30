@@ -1,5 +1,19 @@
 # About
 
-This mod turns lunar coins into a per-run currency, where each player starts with a fixed amount and can gain further coins at a fixed drop rate. Coins no longer need to be directly picked up, and instead are visually dropped through a small animation and a subtle audio cue. If you are looking for something more, such as a full rebalance of lunar coins, check out Ephemeral Coins instead.
+SimpleLunarCoins provides simple config options to lunar coins, with the default settings turning them into a per-run currency that is automatically picked up.
 
-The starting coins, drop rate, and subsequent drop rate multiplier are currently configurable through r2modman. Further settings are to be implemented in the future, such as the ability to enable/disable coin distribution (i.e. everybody getting a coin when one is picked up), and enable/disable manually picking up coins.
+Settings include:
+
+-Initial Coin Chance: The starting % chance for a coin to be dropped
+
+-Coin Chance Multiplier: The value that the coin chance is multiplied by after a coin is dropped
+
+-Starting Coins: The number of coins that each player holds at the start of a run, if the 'Reset Coins Each Run' setting is enabled
+
+-Distribute Coins: Whenever a lunar coin is picked up, a lunar coin is given to every player
+
+-No Coin Droplets: Enemies no longer drop physical coins that need to be manually picked up, and instead are automatically picked up alongside a emitting a custom effect
+
+-Reset Coins Each Run: Each player starts a run with the amount of coins specified in 'Starting Coins'
+
+Bear in mind that using 'Reset Coins Each Run' will (currently) permanently overwrite the lunar coins of each player in the run.
