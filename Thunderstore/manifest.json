@@ -1,8 +1,8 @@
 ﻿{
 	"name": "SimpleLunarCoins",
-	"version_number": "1.1.0",
+	"version_number": "1.1.1",
 	"website_url": "https://github.com/mwoiii/simple-lunar-coins",
-	"description": "Enables simple customisation of lunar coins behaviour through the modman config, turning them into a per-run currency by default.",
+	"description": "Provides simple customisation of the lunar coins behaviour through the BepInEx config file, turning them into a per-run currency by default.",
 	"dependencies": [
 		"bbepis-BepInExPack-5.4.2108",
 		"RiskofThunder-HookGenPatcher-1.2.3",

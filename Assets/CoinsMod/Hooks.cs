@@ -45,7 +45,8 @@ namespace SimpleLunarCoins
         {
             var c = new ILCursor(il);
 
-            var b = c.TryGotoNext(
+            // Custom coin & auto-collect
+            var matched = c.TryGotoNext(
                 x => x.MatchLdsfld(typeof(RoR2Content.MiscPickups).FullName, nameof(RoR2Content.MiscPickups.LunarCoin)),
                 x => x.MatchLdfld<MiscPickupDef>("miscPickupIndex"),
                 x => x.MatchCallOrCallvirt(typeof(PickupCatalog).FullName, nameof(PickupCatalog.FindPickupIndex)),
@@ -56,27 +57,21 @@ namespace SimpleLunarCoins
                 x => x.MatchCallOrCallvirt<Vector3>("get_up"),
                 x => x.MatchLdcR4(10),
                 x => x.MatchCallOrCallvirt<Vector3>("op_Multiply"),
-                x => x.MatchCallOrCallvirt<PickupDropletController>("CreatePickupDroplet"),
-                x => x.MatchLdloc(1),
-                x => x.MatchDup(),
-                x => x.MatchLdfld<PlayerCharacterMasterController>("lunarCoinChanceMultiplier"),
-                x => x.MatchLdcR4(0.5f),
-                x => x.MatchMul()
+                x => x.MatchCallOrCallvirt<PickupDropletController>("CreatePickupDroplet")
                 );
 
-            if (b)
+            if (matched)
             {
-                var label = c.DefineLabel();
-                c.Index += 14;
-                c.Next.Operand = SimpleLunarCoins.coinMultiplier.Value;
-                if (SimpleLunarCoins.noCoinDroplet.Value)
+                if (SimpleLunarCoins.teamCoins.Value)
                 {
-                    c.Index -= 3;
+                    c.Index += 11;
+                    c.Emit(OpCodes.Ldarg_1);
+                    c.Index -= 1;
+                    var label = c.DefineLabel();
                     c.MarkLabel(label);
                     c.Index -= 11;
                     c.Emit(OpCodes.Br, label);
-                    c.Index += 16;
-                    c.Emit(OpCodes.Ldarg_1);
+                    c.Index += 12;
                     c.EmitDelegate<Action<DamageReport>>((damageReport) =>
                     {
                         if (SimpleLunarCoins.teamCoins.Value)
@@ -110,7 +105,25 @@ namespace SimpleLunarCoins
                     });
                 }
             }
-            else { Log.Info("ILHook failed"); }
+            else { Log.Warning("Custom coin drop ILHook failed, likely due to a conflict. This feature will not work as intended."); }
+
+            // Setting coin chance multiplier
+            matched = c.TryGotoNext(           
+                x => x.MatchLdloc(1),
+                x => x.MatchDup(),
+                x => x.MatchLdfld<PlayerCharacterMasterController>("lunarCoinChanceMultiplier"),
+                x => x.MatchLdcR4(0.5f),
+                x => x.MatchMul(),
+                x => x.MatchStfld<PlayerCharacterMasterController>("lunarCoinChanceMultiplier")
+                );
+
+            if (matched)
+            {
+                c.Index += 3;
+                c.Next.Operand = SimpleLunarCoins.coinMultiplier.Value;
+            }
+            else { Log.Warning("Coin chance multiplier ILHook failed, likely due to a conflict. This feature will not work as intended."); }
+
         }
 
         private static void StartingCoins(On.RoR2.Run.orig_OnUserAdded orig, Run self, NetworkUser user)

@@ -1,3 +1,9 @@
+## 1.1.1
+
+-Compatibility improvements
+
+-Formatting improvements
+
 ## 1.1.0
 
 -Updated description and README
