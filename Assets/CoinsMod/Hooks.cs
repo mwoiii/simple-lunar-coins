@@ -22,7 +22,8 @@ namespace SimpleLunarCoins
             // Changing coin drop chance
             On.RoR2.PlayerCharacterMasterController.Awake += InitialCoinChance;
 
-            // Changing chance multiplier & preventing coin droplet, instead spawning coin effect 
+            // Changing chance multiplier & preventing coin droplet, instead spawning coin effect
+            // thank you ephemeral coins
             BindingFlags allFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance | BindingFlags.DeclaredOnly;
             var initDelegate = typeof(PlayerCharacterMasterController).GetNestedTypes(allFlags)[0].GetMethodCached(name: "<Init>b__72_0");
             MonoMod.RuntimeDetour.HookGen.HookEndpointManager.Modify(initDelegate, (Action<ILContext>)CoinDropHook);
