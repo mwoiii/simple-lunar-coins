@@ -62,17 +62,21 @@ namespace SimpleLunarCoins
 
             if (matched)
             {
-                if (SimpleLunarCoins.teamCoins.Value)
+                c.Index += 11;
+                c.Emit(OpCodes.Ldarg_1);
+                c.Index -= 1;
+                var label = c.DefineLabel();
+                c.MarkLabel(label);
+                c.Index -= 11;
+                c.EmitDelegate<Func<bool>>(() =>
                 {
-                    c.Index += 11;
-                    c.Emit(OpCodes.Ldarg_1);
-                    c.Index -= 1;
-                    var label = c.DefineLabel();
-                    c.MarkLabel(label);
-                    c.Index -= 11;
-                    c.Emit(OpCodes.Br, label);
-                    c.Index += 12;
-                    c.EmitDelegate<Action<DamageReport>>((damageReport) =>
+                    return SimpleLunarCoins.noCoinDroplet.Value;
+                });
+                c.Emit(OpCodes.Brtrue, label);
+                c.Index += 12;
+                c.EmitDelegate<Action<DamageReport>>((damageReport) =>
+                {
+                    if (SimpleLunarCoins.noCoinDroplet.Value)
                     {
                         if (SimpleLunarCoins.teamCoins.Value)
                         {
@@ -102,8 +106,8 @@ namespace SimpleLunarCoins
                             genericFloat = 20f,
                             scale = damageReport.victimBody.radius
                         }, transmit: true);
-                    });
-                }
+                    }
+                });
             }
             else { Log.Warning("Custom coin drop ILHook failed, likely due to a conflict. This feature will not work as intended."); }
 
@@ -132,7 +136,7 @@ namespace SimpleLunarCoins
             if (SimpleLunarCoins.resetCoins.Value)
             {
                 user.InvokeMethod("RpcDeductLunarCoins", user.lunarCoins);
-                user.InvokeMethod("RpcAwardLunarCoins", SimpleLunarCoins.startingCoins.Value);
+                user.InvokeMethod("RpcAwardLunarCoins", (uint)SimpleLunarCoins.startingCoins.Value);
             }
             orig(self, user);
         }

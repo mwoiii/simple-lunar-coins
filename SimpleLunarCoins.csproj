@@ -49,6 +49,9 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="RiskOfOptions">
+      <HintPath>..\..\..\AppData\Roaming\r2modmanPlus-local\RiskOfRain2\profiles\mwdev\BepInEx\plugins\Rune580-Risk_Of_Options\RiskOfOptions.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2019.4.26f1\Editor\Data\Managed/UnityEngine/UnityEngine.dll</HintPath>
     </Reference>
@@ -58,6 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\CoinsMod\Assets\CoinSfx.cs" />
+    <Compile Include="Assets\CoinsMod\Compatibility.cs" />
     <Compile Include="Assets\CoinsMod\Content.cs" />
     <Compile Include="Assets\CoinsMod\Hooks.cs" />
     <Compile Include="Assets\CoinsMod\Log.cs" />
