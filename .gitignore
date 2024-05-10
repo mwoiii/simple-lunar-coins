@@ -12,11 +12,13 @@ Temp
 Thunderkit
 Assets/ThunderKitSettings
 Assets/Scenes
+Assets/CoinsMod/Assets
 RoR2StubbedShaders-1.0.0
 StreamingAssets
 com.unity.multiplayer-hlapi.Runtime.dll
 .meta
 .collabignore
+.asset
 
 # User-specific files
 *.suo

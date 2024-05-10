@@ -1,3 +1,11 @@
+## 1.1.4
+
+- Coin multiplier now works when editied with Risk of Options without restart
+
+## 1.1.3
+
+- Fixed mod not working teehee I uploaded the wrong version
+
 ## 1.1.2
 
 - Reduced default coin drop chance to 2%

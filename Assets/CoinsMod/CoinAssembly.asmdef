@@ -19,7 +19,8 @@
         "com.unity.multiplayer-hlapi.Runtime.dll",
         "R2API.Addressables.dll",
         "R2API.Core.dll",
-        "Wwise.dll"
+        "Wwise.dll",
+        "RiskOfOptions.dll"
     ],
     "autoReferenced": true,
     "defineConstraints": [],

@@ -123,8 +123,12 @@ namespace SimpleLunarCoins
 
             if (matched)
             {
-                c.Index += 3;
-                c.Next.Operand = SimpleLunarCoins.coinMultiplier.Value;
+                c.Index += 4;
+                c.Emit(OpCodes.Pop);
+                c.EmitDelegate<Func<float>>(() =>  // Delegate lets it change dynamically (RoO)
+                {
+                    return SimpleLunarCoins.coinMultiplier.Value;
+                });
             }
             else { Log.Warning("Coin chance multiplier ILHook failed, likely due to a conflict. This feature will not work as intended."); }
 

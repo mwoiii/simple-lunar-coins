@@ -23,7 +23,7 @@ namespace SimpleLunarCoins
         public const string PluginGUID = PluginAuthor + "." + PluginName;
         public const string PluginAuthor = "Miyowi";
         public const string PluginName = "SimpleLunarCoins";
-        public const string PluginVersion = "1.1.2";
+        public const string PluginVersion = "1.1.4";
 
         public static ConfigEntry<float> coinChance { get; set; }
         public static ConfigEntry<float> coinMultiplier { get; set; }
