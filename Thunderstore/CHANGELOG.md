@@ -1,3 +1,7 @@
+## 1.1.5
+
+- Added support for ProperSave
+
 ## 1.1.4
 
 - Coin multiplier now works when editied with Risk of Options without restart

@@ -1,6 +1,6 @@
 ﻿{
 	"name": "SimpleLunarCoins",
-	"version_number": "1.1.4",
+	"version_number": "1.1.5",
 	"website_url": "https://github.com/mwoiii/simple-lunar-coins",
 	"description": "Provides simple customisation of the lunar coins behaviour through the BepInEx config or Risk of Options, turning them into a per-run currency by default.",
 	"dependencies": [
