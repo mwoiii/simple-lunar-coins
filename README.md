@@ -1,11 +1,9 @@
-# SimpleLunarCoins
+# ArtifactOfPrestige
 
 ## About
 
-SimpleLunarCoins is a mod for Risk of Rain 2 that allows simple customisation of the lunar coins system in a way that doesn't directly affect the balance of lunar items themselves. The settings can be adjusted through the BepInEx config file, and Risk of Options is also supported.
-
-By default, the mod turns lunar coins into a per-run currency that it automatically picked up with a nifty new effect.
+Implements the Artifact of Prestige into Risk of Rain 2 exactly as it appears in Risk of Rain Returns. Includes additional features from Returns, such as stacking shrine symbols and changing of the shrine symbol colour, which can be turned on and off for both when the artifact is active when it is not. These settings can all be adjusted through the BepInEx config, with support for Risk of Options as well.
 
 ## Installation
 
-[Install from Thunderstore with r2modman](https://thunderstore.io/package/mwmw/SimpleLunarCoins/)
+[Install from Thunderstore with r2modman](https://thunderstore.io/package/mwmw/ArtifactOfPrestige/)

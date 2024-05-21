@@ -1,3 +1,11 @@
+## 1.1.6
+
+- Stopped the mod breaking without ProperSave (I hope). I keep releasing this mod entirely broken. It's a little embarrassing
+
+## 1.1.5
+
+- Added support for ProperSave
+
 ## 1.1.4
 
 - Coin multiplier now works when editied with Risk of Options without restart
