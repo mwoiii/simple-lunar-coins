@@ -1,3 +1,9 @@
+## 1.2.0
+
+- Added support for the Seekers of the Storm update
+  - Support for ProperSave and Risk of Options remains implemented, hopefully
+  - Coin sound effect unintentionally now only plays on occasion and I have no idea what I'm meant to do about this
+
 ## 1.1.6
 
 - Stopped the mod breaking without ProperSave (I hope). I keep releasing this mod entirely broken. It's a little embarrassing

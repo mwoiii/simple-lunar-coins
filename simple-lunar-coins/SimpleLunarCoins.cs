@@ -4,9 +4,9 @@ using Mono.Cecil.Cil;
 using R2API;
 using R2API.Utils;
 using RoR2;
-using UnityEngine;
 using System;
 using System.Reflection;
+using UnityEngine;
 using BepInEx.Configuration;
 
 namespace SimpleLunarCoins
@@ -16,8 +16,6 @@ namespace SimpleLunarCoins
 
     [BepInDependency("com.KingEnderBrine.ProperSave", BepInDependency.DependencyFlags.SoftDependency)]
 
-    [BepInDependency(LanguageAPI.PluginGUID)]
-
     [BepInPlugin(PluginGUID, PluginName, PluginVersion)]
 
     public class SimpleLunarCoins : BaseUnityPlugin
@@ -25,7 +23,7 @@ namespace SimpleLunarCoins
         public const string PluginGUID = PluginAuthor + "." + PluginName;
         public const string PluginAuthor = "Miyowi";
         public const string PluginName = "SimpleLunarCoins";
-        public const string PluginVersion = "1.1.6";
+        public const string PluginVersion = "1.2.0";
 
         public static ConfigEntry<float> coinChance { get; set; }
         public static ConfigEntry<float> coinMultiplier { get; set; }
@@ -59,12 +57,12 @@ namespace SimpleLunarCoins
             {
                 RiskOfOptionsCompatibility.OptionsInit();
             }
-            //On.RoR2.Networking.NetworkManagerSystemSteam.OnClientConnect += (s, u, t) => { };
+            //On.RoR2.Networking.NetworkManagerSystemSteam.OnClientConnect += (s, u, t) => { }
         }
 
-        public void Start()
+        public void OnDestroy()
         {
-            SoundBanks.Init();
+            Log.Warning("YOU WILL RUE THE DAY YOU CAST ME AWAY");
         }
 
     }

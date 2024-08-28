@@ -11,7 +11,6 @@ using BepInEx.Configuration;
 using RoR2.ContentManagement;
 using System.Collections;
 using Path = System.IO.Path;
-using static Facepunch.Steamworks.LobbyList.Filter;
 using System.Collections.Generic;
 using Rewired.Utils.Classes.Data;
 using Newtonsoft.Json;
@@ -22,16 +21,21 @@ namespace SimpleLunarCoins
 {
 	public class Hooks
 	{
+        private static GameObject coinPrefab = Assets.mainAssetBundle.LoadAssetAsync<GameObject>("LunarCoinEmitter").asset as GameObject;
         public static void Init()
         {
             // Changing coin drop chance
             On.RoR2.PlayerCharacterMasterController.Awake += InitialCoinChance;
 
+            
             // Changing chance multiplier & preventing coin droplet, instead spawning coin effect
             // thank you ephemeral coins
             BindingFlags allFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance | BindingFlags.DeclaredOnly;
-            var initDelegate = typeof(PlayerCharacterMasterController).GetNestedTypes(allFlags)[0].GetMethodCached(name: "<Init>b__72_0");
+            var initDelegate = typeof(PlayerCharacterMasterController).GetNestedTypes(allFlags)[0].GetMethodCached(name: "<Init>b__79_0");
             MonoMod.RuntimeDetour.HookGen.HookEndpointManager.Modify(initDelegate, (Action<ILContext>)CoinDropHook);
+
+            // Loading soundbanks for coin flip noise
+            On.RoR2.Run.Awake += InitSoundbanks;
 
             // Setting coins at start of run
             On.RoR2.Run.Start += StartingCoins;
@@ -74,6 +78,7 @@ namespace SimpleLunarCoins
 
             if (matched)
             {
+                
                 c.Index += 11;
                 c.Emit(OpCodes.Ldarg_1);
                 c.Index -= 1;
@@ -108,18 +113,12 @@ namespace SimpleLunarCoins
                             }
                         }
 
-                        /*
-                        AssetBundleRequest loadAsset = Assets.mainAssetBundle.LoadAssetAsync<GameObject>("LunarCoinEmitter");
-                        GameObject myLoadedPrefab = loadAsset.asset as GameObject;
-
-                        var coinEffectPrefab = myLoadedPrefab;
-                        EffectManager.SpawnEffect(coinEffectPrefab, new EffectData
+                        EffectManager.SpawnEffect(coinPrefab, new EffectData
                         {
                             origin = damageReport.victimBody.corePosition,
                             genericFloat = 20f,
                             scale = damageReport.victimBody.radius
                         }, transmit: true);
-                        */
                     }
                 });
             }
@@ -190,14 +189,14 @@ namespace SimpleLunarCoins
             {
                 string jsonString = ProperSaveCompatibility.GetModdedData("SimpleLunarCoinsObj");
 
-                var playerCoins = JsonConvert.DeserializeObject<Dictionary<ulong, uint>>(jsonString);
+                var playerCoins = JsonConvert.DeserializeObject<Dictionary<string, uint>>(jsonString);
 
                 foreach (var user in NetworkUser.readOnlyInstancesList)
                 {
-                    if (playerCoins.ContainsKey(user.GetNetworkPlayerName().steamId.steamValue))
+                    if (playerCoins.ContainsKey(user.GetNetworkPlayerName().GetResolvedName()))
                     {
                         user.DeductLunarCoins(user.lunarCoins);
-                        user.AwardLunarCoins((uint)playerCoins[user.GetNetworkPlayerName().steamId.steamValue]);
+                        user.AwardLunarCoins((uint)playerCoins[user.GetNetworkPlayerName().GetResolvedName()]);
                     }
                 }
             }
@@ -207,10 +206,10 @@ namespace SimpleLunarCoins
 
         private static void SaveCoins(Dictionary<string, object> dict)
         {
-            Dictionary<ulong, uint> playerCoins = [];
+            Dictionary<string, uint> playerCoins = [];
             foreach (var user in NetworkUser.instancesList)
             {
-                playerCoins.Add(user.GetNetworkPlayerName().steamId.steamValue, user.lunarCoins);
+                playerCoins.Add(user.GetNetworkPlayerName().GetResolvedName(), user.lunarCoins);
             }
             string jsonString = JsonConvert.SerializeObject(playerCoins);
             dict.Add("SimpleLunarCoinsObj", jsonString);
@@ -230,6 +229,12 @@ namespace SimpleLunarCoins
                 }
             }
             orig(self, ref context);
+        }
+
+        private static void InitSoundbanks(On.RoR2.Run.orig_Awake orig, Run self)
+        {
+            orig(self);
+            SoundBanks.Init();
         }
     }
 }

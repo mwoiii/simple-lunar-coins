@@ -2,6 +2,7 @@
 using RoR2.ContentManagement;
 using System.Collections;
 using Path = System.IO.Path;
+using AK.Wwise;
 
 
 namespace SimpleLunarCoins
@@ -103,12 +104,12 @@ namespace SimpleLunarCoins
             AkSoundEngine.LoadBank("cointoss.bnk", out _);
             if (akResult == AKRESULT.AK_Success)
             {
-                Log.Info($"Added bank : {"cointoss.bnk"}");
+                Log.Info($"Added bank : cointoss.bnk");
             }
             else
             {
                 Log.Error(
-                    $"Error loading bank : {"cointoss.bnk"} " +
+                    $"Error loading bank : cointoss.bnk "+
                     $"Error code : {akResult}");
             }
         }
