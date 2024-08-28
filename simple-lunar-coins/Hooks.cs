@@ -108,6 +108,7 @@ namespace SimpleLunarCoins
                             }
                         }
 
+                        /*
                         AssetBundleRequest loadAsset = Assets.mainAssetBundle.LoadAssetAsync<GameObject>("LunarCoinEmitter");
                         GameObject myLoadedPrefab = loadAsset.asset as GameObject;
 
@@ -118,6 +119,7 @@ namespace SimpleLunarCoins
                             genericFloat = 20f,
                             scale = damageReport.victimBody.radius
                         }, transmit: true);
+                        */
                     }
                 });
             }
