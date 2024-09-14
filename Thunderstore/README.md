@@ -4,7 +4,7 @@
 
 SimpleLunarCoins is a mod that aims to provide subtle customisation of how lunar coins are handled without otherwise reworking any major gameplay elements. 
 
-By default, the mod will turn lunar coins into a per-run currency. Coins are automatically picked up, and coin pickups are replaced with a new effect of the enemy dropping said coin in the same fashion as gold. Coin drop chance is also set to a fixed value, and all players receive a coin when one is dropped. However, all of the aforementioned settings are customisable in the **BepInEx config file** or with **Risk of Options**, and a full list of the settings can be read below. You could even change the settings back to default RoR2, if you really wanted. I don't know why you'd want to do that.
+By default, coins are automatically picked up, distributed among all players, and coin pickups are replaced with a new effect of the enemy dropping said coin in the same fashion as gold. All of the aforementioned settings are customisable in the **BepInEx config file** or with **Risk of Options**, and a full list of the settings can be read below.
 
 If you're looking for a mod that provides a full rework of the lunar coin system, including most of the changes this mod provides, check out [Ephemeral Coins](https://thunderstore.io/package/VarnaScelestus/Ephemeral_Coins/) instead.
 

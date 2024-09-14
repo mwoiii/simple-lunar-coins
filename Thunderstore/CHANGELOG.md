@@ -1,3 +1,14 @@
+## 1.2.3
+- Updated dependency string
+- Modified default settings to only replace droplet effect and distribute coins among all players
+  - Before, changed settings were 2% initial coin chance, coin chance multiplier 1x, and reset coins each run: true
+
+## 1.2.2
+- Literally the same thing as before
+
+## 1.2.1
+- Fixed incorrect line reference after new patch
+
 ## 1.2.0
 
 - Added support for the Seekers of the Storm update
