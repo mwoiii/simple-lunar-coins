@@ -24,7 +24,7 @@
 	</ItemGroup>
 	<ItemGroup>
 		<Reference Include="ProperSave">
-			<HintPath>bin\Debug\netstandard2.1\ProperSave.dll</HintPath>
+			<HintPath>libs\ProperSave.dll</HintPath>
 		</Reference>
 		<Reference Include="Facepunch.Steamworks">
 			<HintPath>libs\Facepunch.Steamworks.dll</HintPath>
