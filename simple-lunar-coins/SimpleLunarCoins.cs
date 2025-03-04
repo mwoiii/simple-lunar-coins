@@ -1,16 +1,7 @@
 using BepInEx;
-using MonoMod.Cil;
-using Mono.Cecil.Cil;
-using R2API;
-using R2API.Utils;
-using RoR2;
-using System;
-using System.Reflection;
-using UnityEngine;
 using BepInEx.Configuration;
 
-namespace SimpleLunarCoins
-{
+namespace SimpleLunarCoins {
 
     [BepInDependency("com.rune580.riskofoptions", BepInDependency.DependencyFlags.SoftDependency)]
 
@@ -18,12 +9,11 @@ namespace SimpleLunarCoins
 
     [BepInPlugin(PluginGUID, PluginName, PluginVersion)]
 
-    public class SimpleLunarCoins : BaseUnityPlugin
-    {
+    public class SimpleLunarCoins : BaseUnityPlugin {
         public const string PluginGUID = PluginAuthor + "." + PluginName;
         public const string PluginAuthor = "Miyowi";
         public const string PluginName = "SimpleLunarCoins";
-        public const string PluginVersion = "1.2.3";
+        public const string PluginVersion = "1.2.5";
 
         public static ConfigEntry<float> coinChance { get; set; }
         public static ConfigEntry<float> coinMultiplier { get; set; }
@@ -34,8 +24,7 @@ namespace SimpleLunarCoins
 
         public static PluginInfo pluginInfo;
 
-        public void Awake()
-        {
+        public void Awake() {
             pluginInfo = Info;
 
             Assets.PopulateAssets();
@@ -53,16 +42,14 @@ namespace SimpleLunarCoins
 
             ContentPackProvider.Initialize();
 
-            if (RiskOfOptionsCompatibility.enabled)
-            {
+            if (RiskOfOptionsCompatibility.enabled) {
                 RiskOfOptionsCompatibility.OptionsInit();
             }
             //On.RoR2.Networking.NetworkManagerSystemSteam.OnClientConnect += (s, u, t) => { }
         }
 
-        public void OnDestroy()
-        {
-            Log.Warning("YOU WILL RUE THE DAY YOU CAST ME AWAY");
+        public void OnDestroy() {
+            // Log.Warning("YOU WILL RUE THE DAY YOU CAST ME AWAY");
         }
 
     }

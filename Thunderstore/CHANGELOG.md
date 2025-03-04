@@ -1,3 +1,9 @@
+## 1.2.5
+- You know the drill
+
+## 1.2.4
+- Regularly-scheduled fix after any game update of any variety
+
 ## 1.2.3
 - Updated dependency string
 - Modified default settings to only replace droplet effect and distribute coins among all players

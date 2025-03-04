@@ -1,37 +1,27 @@
-﻿using BepInEx;
-using MonoMod.Cil;
+﻿using System;
+using System.Collections.Generic;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 using Mono.Cecil.Cil;
-using R2API;
+using MonoMod.Cil;
+using Newtonsoft.Json;
 using R2API.Utils;
 using RoR2;
 using UnityEngine;
-using System;
-using System.Reflection;
-using BepInEx.Configuration;
-using RoR2.ContentManagement;
-using System.Collections;
-using Path = System.IO.Path;
-using System.Collections.Generic;
-using Rewired.Utils.Classes.Data;
-using Newtonsoft.Json;
 using UnityEngine.Networking;
-using System.Runtime.CompilerServices;
 
-namespace SimpleLunarCoins
-{
-	public class Hooks
-	{
+namespace SimpleLunarCoins {
+    public class Hooks {
         private static GameObject coinPrefab = Assets.mainAssetBundle.LoadAssetAsync<GameObject>("LunarCoinEmitter").asset as GameObject;
-        public static void Init()
-        {
+        public static void Init() {
             // Changing coin drop chance
             On.RoR2.PlayerCharacterMasterController.Awake += InitialCoinChance;
 
-            
+
             // Changing chance multiplier & preventing coin droplet, instead spawning coin effect
             // thank you ephemeral coins
             BindingFlags allFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance | BindingFlags.DeclaredOnly;
-            var initDelegate = typeof(PlayerCharacterMasterController).GetNestedTypes(allFlags)[0].GetMethodCached(name: "<Init>b__81_0");
+            var initDelegate = typeof(PlayerCharacterMasterController).GetNestedTypes(allFlags)[0].GetMethodCached(name: "<Init>b__83_0");
             MonoMod.RuntimeDetour.HookGen.HookEndpointManager.Modify(initDelegate, (Action<ILContext>)CoinDropHook);
 
             // Loading soundbanks for coin flip noise
@@ -43,22 +33,19 @@ namespace SimpleLunarCoins
             // Lunar coin distribution for droplet (distribution for effect type is built into CoinDropHook)
             On.RoR2.LunarCoinDef.GrantPickup += RegularCoinDistribute;
 
-            
+
             // ProperSave compatibility
-            if (ProperSaveCompatibility.enabled)
-            {
+            if (ProperSaveCompatibility.enabled) {
                 ProperSaveCompatibility.AddEvent(SaveCoins);
             }
         }
 
-        private static void InitialCoinChance(On.RoR2.PlayerCharacterMasterController.orig_Awake orig, PlayerCharacterMasterController self)
-        {
+        private static void InitialCoinChance(On.RoR2.PlayerCharacterMasterController.orig_Awake orig, PlayerCharacterMasterController self) {
             orig(self);
             self.SetFieldValue("lunarCoinChanceMultiplier", SimpleLunarCoins.coinChance.Value);
         }
 
-        private static void CoinDropHook(ILContext il)
-        {
+        private static void CoinDropHook(ILContext il) {
             var c = new ILCursor(il);
 
             // Custom coin & auto-collect
@@ -76,56 +63,44 @@ namespace SimpleLunarCoins
                 x => x.MatchCallOrCallvirt<PickupDropletController>("CreatePickupDroplet")
                 );
 
-            if (matched)
-            {
-                
+            if (matched) {
+
                 c.Index += 11;
                 c.Emit(OpCodes.Ldarg_1);
                 c.Index -= 1;
                 var label = c.DefineLabel();
                 c.MarkLabel(label);
                 c.Index -= 11;
-                c.EmitDelegate<Func<bool>>(() =>
-                {
+                c.EmitDelegate<Func<bool>>(() => {
                     return SimpleLunarCoins.noCoinDroplet.Value;
                 });
                 c.Emit(OpCodes.Brtrue, label);
                 c.Index += 12;
-                c.EmitDelegate<Action<DamageReport>>((damageReport) =>
-                {
-                    if (SimpleLunarCoins.noCoinDroplet.Value)
-                    {
-                        if (SimpleLunarCoins.teamCoins.Value)
-                        {
-                            foreach (PlayerCharacterMasterController instance in PlayerCharacterMasterController.instances)
-                            {
-                                if ((bool)instance.GetFieldValue<NetworkUser>("resolvedNetworkUserInstance"))
-                                {
+                c.EmitDelegate<Action<DamageReport>>((damageReport) => {
+                    if (SimpleLunarCoins.noCoinDroplet.Value) {
+                        if (SimpleLunarCoins.teamCoins.Value) {
+                            foreach (PlayerCharacterMasterController instance in PlayerCharacterMasterController.instances) {
+                                if ((bool)instance.GetFieldValue<NetworkUser>("resolvedNetworkUserInstance")) {
                                     instance.GetFieldValue<NetworkUser>("resolvedNetworkUserInstance").AwardLunarCoins(1);
                                 }
                             }
-                        }
-                        else
-                        {
-                            if ((bool)damageReport.attackerMaster.playerCharacterMasterController)
-                            {
+                        } else {
+                            if ((bool)damageReport.attackerMaster.playerCharacterMasterController) {
                                 damageReport.attackerMaster.playerCharacterMasterController.GetFieldValue<NetworkUser>("resolvedNetworkUserInstance").AwardLunarCoins(1);
                             }
                         }
 
-                        EffectManager.SpawnEffect(coinPrefab, new EffectData
-                        {
+                        EffectManager.SpawnEffect(coinPrefab, new EffectData {
                             origin = damageReport.victimBody.corePosition,
                             genericFloat = 20f,
                             scale = damageReport.victimBody.radius
                         }, transmit: true);
                     }
                 });
-            }
-            else { Log.Warning("Custom coin drop ILHook failed, likely due to a conflict. This feature will not work as intended."); }
+            } else { Log.Warning("Custom coin drop ILHook failed, likely due to a conflict. This feature will not work as intended."); }
 
             // Setting coin chance multiplier
-            matched = c.TryGotoNext(           
+            matched = c.TryGotoNext(
                 x => x.MatchLdloc(1),
                 x => x.MatchDup(),
                 x => x.MatchLdfld<PlayerCharacterMasterController>("lunarCoinChanceMultiplier"),
@@ -134,16 +109,14 @@ namespace SimpleLunarCoins
                 x => x.MatchStfld<PlayerCharacterMasterController>("lunarCoinChanceMultiplier")
                 );
 
-            if (matched)
-            {
+            if (matched) {
                 c.Index += 4;
                 c.Emit(OpCodes.Pop);
                 c.EmitDelegate<Func<float>>(() =>  // Delegate lets it change dynamically (RoO)
                 {
                     return SimpleLunarCoins.coinMultiplier.Value;
                 });
-            }
-            else { Log.Warning("Coin chance multiplier ILHook failed, likely due to a conflict. This feature will not work as intended."); }
+            } else { Log.Warning("Coin chance multiplier ILHook failed, likely due to a conflict. This feature will not work as intended."); }
 
         }
 
@@ -160,41 +133,32 @@ namespace SimpleLunarCoins
         }
         */
 
-        
+
         [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]
-        private static void StartingCoins(On.RoR2.Run.orig_Start orig, Run self)
-        {
-            if (!NetworkServer.active) 
-            { 
+        private static void StartingCoins(On.RoR2.Run.orig_Start orig, Run self) {
+            if (!NetworkServer.active) {
                 orig(self);
                 return;
             }
 
             bool isLoading = false;
-            if (ProperSaveCompatibility.enabled)
-            {
+            if (ProperSaveCompatibility.enabled) {
                 if (ProperSaveCompatibility.IsLoading) { isLoading = true; }
             }
 
-            if (!isLoading && SimpleLunarCoins.resetCoins.Value)
-            {
+            if (!isLoading && SimpleLunarCoins.resetCoins.Value) {
 
-                foreach (var user in NetworkUser.readOnlyInstancesList) 
-                {
+                foreach (var user in NetworkUser.readOnlyInstancesList) {
                     user.DeductLunarCoins(user.lunarCoins);
                     user.AwardLunarCoins((uint)SimpleLunarCoins.startingCoins.Value);
                 }
-            }
-            else if (isLoading)
-            {
+            } else if (isLoading) {
                 string jsonString = ProperSaveCompatibility.GetModdedData("SimpleLunarCoinsObj");
 
                 var playerCoins = JsonConvert.DeserializeObject<Dictionary<string, uint>>(jsonString);
 
-                foreach (var user in NetworkUser.readOnlyInstancesList)
-                {
-                    if (playerCoins.ContainsKey(user.GetNetworkPlayerName().GetResolvedName()))
-                    {
+                foreach (var user in NetworkUser.readOnlyInstancesList) {
+                    if (playerCoins.ContainsKey(user.GetNetworkPlayerName().GetResolvedName())) {
                         user.DeductLunarCoins(user.lunarCoins);
                         user.AwardLunarCoins((uint)playerCoins[user.GetNetworkPlayerName().GetResolvedName()]);
                     }
@@ -202,28 +166,22 @@ namespace SimpleLunarCoins
             }
             orig(self);
         }
-        
 
-        private static void SaveCoins(Dictionary<string, object> dict)
-        {
+
+        private static void SaveCoins(Dictionary<string, object> dict) {
             Dictionary<string, uint> playerCoins = [];
-            foreach (var user in NetworkUser.instancesList)
-            {
+            foreach (var user in NetworkUser.instancesList) {
                 playerCoins.Add(user.GetNetworkPlayerName().GetResolvedName(), user.lunarCoins);
             }
             string jsonString = JsonConvert.SerializeObject(playerCoins);
             dict.Add("SimpleLunarCoinsObj", jsonString);
         }
 
-        private static void RegularCoinDistribute(On.RoR2.LunarCoinDef.orig_GrantPickup orig, LunarCoinDef self, ref PickupDef.GrantContext context)
-        {
-            if (SimpleLunarCoins.teamCoins.Value)
-            {
+        private static void RegularCoinDistribute(On.RoR2.LunarCoinDef.orig_GrantPickup orig, LunarCoinDef self, ref PickupDef.GrantContext context) {
+            if (SimpleLunarCoins.teamCoins.Value) {
                 NetworkUser networkUser = Util.LookUpBodyNetworkUser(context.body);
-                foreach (PlayerCharacterMasterController instance in PlayerCharacterMasterController.instances)
-                {
-                    if ((bool)instance.GetFieldValue<NetworkUser>("resolvedNetworkUserInstance") && instance.GetFieldValue<NetworkUser>("resolvedNetworkUserInstance") != networkUser)
-                    {
+                foreach (PlayerCharacterMasterController instance in PlayerCharacterMasterController.instances) {
+                    if ((bool)instance.GetFieldValue<NetworkUser>("resolvedNetworkUserInstance") && instance.GetFieldValue<NetworkUser>("resolvedNetworkUserInstance") != networkUser) {
                         instance.GetFieldValue<NetworkUser>("resolvedNetworkUserInstance").AwardLunarCoins(1);
                     }
                 }
@@ -231,8 +189,7 @@ namespace SimpleLunarCoins
             orig(self, ref context);
         }
 
-        private static void InitSoundbanks(On.RoR2.Run.orig_Awake orig, Run self)
-        {
+        private static void InitSoundbanks(On.RoR2.Run.orig_Awake orig, Run self) {
             orig(self);
             SoundBanks.Init();
         }
