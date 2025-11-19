@@ -1,3 +1,6 @@
+## 1.2.7
+- Fixed for DLC3 update
+
 ## 1.2.6
 - README changes
 

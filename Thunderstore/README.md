@@ -27,4 +27,5 @@ automatically picked up alongside a emitting a custom effect.
 
 # Contact
 Discord: miyowi
+
 [Ko-fi](https://ko-fi.com/miyowi)
