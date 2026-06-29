@@ -1,3 +1,9 @@
+## 1.3.0
+
+- Overhauled codebase, protecting against incompats and game updates
+- The lunar coin emitter VFX now uses the correct material
+- The coin toss SFX that accompanies the VFX now once again plays 100% of the time
+
 ## 1.2.7
 - Fixed for DLC3 update
 

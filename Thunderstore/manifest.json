@@ -1,11 +1,12 @@
 ﻿{
 	"name": "SimpleLunarCoins",
-	"version_number": "1.2.7",
+	"version_number": "1.3.0",
 	"website_url": "https://github.com/mwoiii/simple-lunar-coins",
-	"description": "Provides simple customisation of the lunar coins behaviour, capable of turning them into a per-run currency through BepInEx config. Includes Risk of Options support.",
+	"description": "Provides simple customisation for the behaviour of lunar coins, capable of turning them into a per-run currency through the BepInEx config. Support Risk of Options!",
 	"dependencies": [
 		"bbepis-BepInExPack-5.4.2108",
 		"RiskofThunder-HookGenPatcher-1.2.3",
-		"RiskofThunder-R2API_Core-5.1.1"
+		"RiskofThunder-R2API_Core-5.1.1",
+		"RiskofThunder-R2API_Sound-1.0.3"
 	]
 }
